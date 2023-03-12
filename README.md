@@ -1,4 +1,4 @@
-# file_manager
+# fast_crypt
 
 A new Flutter project.
 

@@ -1,6 +1,6 @@
 {
-    "name": "file_manager",
-    "short_name": "file_manager",
+    "name": "fast_crypt",
+    "short_name": "fast_crypt",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ff00ff",

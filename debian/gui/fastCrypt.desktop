@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=fastCrypt
+GenericName=fastCrypt
+Comment=for encrypting and decrypting files
+Terminal=false
+Type=Application
+Categories=Utility
+Keywords=Flutter;encrypt;files;file
