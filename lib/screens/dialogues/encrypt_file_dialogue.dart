@@ -48,7 +48,6 @@ class _EncryptFileDialogueState extends State<EncryptFileDialogue> {
       child: Builder(builder: (context) {
         switch (_status) {
           case ProcessingStatus.initial:
-            // TODO: Handle this case.
             return Container(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -57,12 +56,12 @@ class _EncryptFileDialogueState extends State<EncryptFileDialogue> {
                   // if (encrypt) Text('Encryption Mode') else Text('Decryption Mode'),
                   if (widget.entities != null && widget.entities!.isNotEmpty)
                     if (encrypt)
-                      Text(
+                      const Text(
                         'You are Encrypting',
                         style: boldTextStyle,
                       )
                     else
-                      Text(
+                      const Text(
                         'You are Decrypting',
                         style: boldTextStyle,
                       ),
@@ -72,11 +71,11 @@ class _EncryptFileDialogueState extends State<EncryptFileDialogue> {
                             (e is File ? "File: " : "Folder: ") +
                             fileEntityBasename(e))
                         .join(', ')),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
-                      Text('encrypt'),
-                      SizedBox(width: 10),
+                      const Text('encrypt'),
+                      const SizedBox(width: 10),
                       Checkbox(
                           value: encrypt,
                           onChanged: (val) {
@@ -88,15 +87,17 @@ class _EncryptFileDialogueState extends State<EncryptFileDialogue> {
                   ),
                   ListTile(
                     title: TextField(
-                      decoration: InputDecoration(label: Text('input key')),
+                      decoration:
+                          const InputDecoration(label: Text('input key')),
                       controller: _encKeyController,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   if (encrypt)
                     ListTile(
                       title: TextField(
-                        decoration: InputDecoration(label: Text('confirm key')),
+                        decoration:
+                            const InputDecoration(label: Text('confirm key')),
                         controller: _encKeyConfirmController,
                       ),
                     ),
@@ -151,10 +152,8 @@ class _EncryptFileDialogueState extends State<EncryptFileDialogue> {
                 Navigator.pop(context);
               },
             );
-            break;
           case ProcessingStatus.loading:
             return LoadingScreen();
-            break;
         }
       }),
     );
@@ -189,11 +188,22 @@ class _EncryptFileDialogueState extends State<EncryptFileDialogue> {
 
   Future<void> encryptFiles() async {
     LoadingController loadingController = Get.find();
-
+    bool errorExist = false;
     loadingController.startOperations(widget.files.length);
     for (var file in widget.files) {
-      await SimpleEncrypter.encrypt(file, _encKeyController.text);
-      loadingController.progress();
+      try {
+        await SimpleEncrypter.encrypt(file, _encKeyController.text);
+        loadingController.progress();
+      } on CheckEncryptionKeyException catch (e) {
+        errorExist = true;
+        errorMessage += '|${fileEntityBasename(file)}:  ${e.message}|| \n';
+      } on EncryptionException catch (e) {
+        errorExist = true;
+        errorMessage += '${fileEntityBasename(file)}:  ${e.message}|| ';
+      } finally {}
+    }
+    if (errorExist) {
+      throw EncryptionException();
     }
   }
 }
