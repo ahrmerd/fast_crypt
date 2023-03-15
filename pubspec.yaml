@@ -52,6 +52,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   change_app_package_name: ^1.1.0
   flutter_launcher_icons: ^0.12.0
+  msix: ^3.9.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -111,3 +112,13 @@ flutter_icons:
   macos:
     generate: true
     image_path: "assets/icons/icon.png"
+
+msix_config:
+  display_name: FastCrypt
+  publisher_display_name: ahrmerd
+  identity_name: com.ahrmerd.fastcrypt
+  msix_version: 1.0.0.0
+  logo_path: C:\Users\ahmed\Documents\GitHub\fast_crypt\assets\icons\icon.png
+  capabilities: removableStorage, broadFileSystemAccess
+  certificate_path: C:\Users\ahmed\a.pfx
+  certificate_password: ahrmerd
